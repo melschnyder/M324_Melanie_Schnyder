@@ -1,0 +1,32 @@
+name: PR Comment
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pr-comment:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Fetch random quote
+        id: quote
+        continue-on-error: true
+        run: |
+          QUOTE_DATA=$(curl -s https://zenquotes.io/api/random)
+
+          if [ -z "$QUOTE_DATA" ]; then
+            echo "text=Leide keine Quotes verfügbar." >> $GITHUB_OUTPUT
+          else
+            CONTENT=$(echo $QUOTE_DATA | jq -r '.[0].q')
+            AUTHOR=$(echo $QUOTE_DATA | jq -r '.[0].a')
+            echo "text=$CONTENT — $AUTHOR" >> $GITHUB_OUTPUT
+          fi
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            > "${{ steps.quote.outputs.text }}"
