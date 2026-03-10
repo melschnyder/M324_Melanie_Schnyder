@@ -7,7 +7,8 @@
     "start": "npm run lint && npm run format && npm run test ./ && node index.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "mocha"
+    "test": "mocha",
+    "format-check": "prettier --check ."
   },
   "author": "",
   "license": "ISC",
