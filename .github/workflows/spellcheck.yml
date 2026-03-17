@@ -1,0 +1,19 @@
+name: Spellcheck
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  spelling:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Markdown Spellcheck
+        uses: igsekor/pyspelling-any@v0.0.2
+        with:
+          configFile: ./spellcheck.yml
